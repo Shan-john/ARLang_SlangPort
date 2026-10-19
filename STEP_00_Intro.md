@@ -24,11 +24,10 @@ So the partitioning criterion for interpreters is:
 
 - **Front end:** “Understand and validate the program.”
 - **Back end:** “Execute the program at runtime.”
-
-The above stages of ARLang can be classified as front end and back end. Lexical analysis, parsing and semantic validation together constitute front end and execution of the program/creation of executable file constitute back end. So on what criteria is this partitioning made ? In real compilers like clang/llvm or java, the front end part is the part which can be reused between all the different machine architectures the compiler needs to support. This is usually an intermediate representation and such IRs are constructed from the ASTs generated from the parser. ARLang is too simple to have an IR at least in this edition of the book. The backend is the machine specific section that takes the IR and either executes it or compiles it into machine code.
-
-
-## What Is OneOf?
+ 
+In more advanced VMs like CPython, the back end may include bytecode generation, bytecode interpretation, and/or JIT compilation, but in a simple interpreter like ARLang, the back end is just AST execution.
+ 
+## What is OneOf (Union Type) ?
 
 OneOf is a C# library that lets a variable store one of several possible types, but only one at a time. It helps you write safer code by making sure you handle every possible type.
 
