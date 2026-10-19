@@ -1,24 +1,29 @@
 # Introduction
 
-### What is a compiler ?
+### What is an interpreter ?
 
-A compiler in its simplest form is a program that takes a string as input and produces executable program as output.
+Interpreters and compilers are things that are used to instruct a computer how to act according to its user's needs. Differentiating an interpreter from a compiler is less straightforward today because modern implementations of interpreters like JavaScript and Python have a compiler component within them and modern compilers like Java and C# have an interpreter component in their pipeline. 
 
-If we black box the compiler, the input going in to the black box/compiler is a string and the output coming out is an exe file.
+A simple interpreter is a program that takes a string (source code) as input and performs the actions in that source code one by one. The action can be something like executing a function that prints out the details of weather in Kochi.
 
-If the program in question is an interpreter, the output will not be a file. Instead it will be the execution of the desired effects expressed in the input string.
+A very large portion of developer population have no idea what is going on inside an interpreter. They think interpreters as black boxes that have big nerdy stuff going inside only Einsteins and Curies can understand. This pragmatic guide lets you see inside those black boxes, and understand the intricacies within so that you too can build one when the necessity comes, and it comes way more often than you might think.
 
-A very large portion of developer population have no idea what is going on inside that black box. They think such black boxes have big nerdy stuff going inside only Einsteins and Curies can understand. This pragmatic guide lets you see inside the black box and understand the intricacies within so that you can build one when the necessity comes and it comes way more often than you might think.
-
-The black box we are going to build in this book is called ARLang. It will have capabilities to directly execute effects expressed in input string (from now on this input string will be called source code) and produce exe files that can produce those effects upon execution.
-
-ARLang will have 4 stages in its compilation process. You can picturize them as a pipeline, where one stage's output is the next one's input. 
+The interpreter we are going to build in this book is called ARLang. ARLang will have 4 stages in its interpretation process. You can picturize them forming a pipeline, where one stage's output is the next one's input. 
 - Lexical analysis of input string
-- Parsing / Generation of Abstract Syntax Tree
-- Semantic Validation of Abstract Syntax Tree
-- Depending upon the user choice the next step will be either:
-    - Execution of effects
-    - Creation of executable file
+- Parsing / Generation of Abstract Syntax Tree (AST)
+- Semantic Validation of Abstract Syntax Tree (AST)
+- AST Traversal and Execution 
+
+These stages can be split into **front end** and **back end**.
+
+Lexical analysis, parsing, and semantic validation together constitute the **front end** of ARLang. Its job begins at reading the source code and ends at producing the AST. This part is mostly platform-independent and generally reusable across platforms.
+
+The **back end** in ARLang is the runtime execution part: it takes the validated AST and performs the program’s behavior which is direct AST evaluation.
+
+So the partitioning criterion for interpreters is:
+
+- **Front end:** “Understand and validate the program.”
+- **Back end:** “Execute the program at runtime.”
 
 The above stages of ARLang can be classified as front end and back end. Lexical analysis, parsing and semantic validation together constitute front end and execution of the program/creation of executable file constitute back end. So on what criteria is this partitioning made ? In real compilers like clang/llvm or java, the front end part is the part which can be reused between all the different machine architectures the compiler needs to support. This is usually an intermediate representation and such IRs are constructed from the ASTs generated from the parser. ARLang is too simple to have an IR at least in this edition of the book. The backend is the machine specific section that takes the IR and either executes it or compiles it into machine code.
 
@@ -434,3 +439,4 @@ For example, a method taking `Vehicle` can accept a car or a cycle, but not an u
 If we add another vehicle type to the union later, calls to `Match()` need a handler for the new case too. This helps us find the places that need updating.
 
 There is no need for OneOf if the program only works with cars: use `Car` directly. If many vehicle types share the same behavior and new types will be added often, an interface or base class may be a better fit.
+In more advanced VMs like CPython, the back end may include bytecode generation, bytecode interpretation, and/or JIT compilation, but in a simple interpreter like ARLang, the back end is just AST execution.
